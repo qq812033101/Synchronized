@@ -29,12 +29,15 @@ public class T {
 
     public static void main(String[] args) {
         T t = new T();
-        new Thread(() -> t.m(), "t1").start();
+
+        new Thread(t::m, "t1").start();
+
         try {
             TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         t.running = false;
     }
 }
