@@ -8,7 +8,7 @@ public class T {
             /*
              * synchronized 锁定的是一个对象
              *
-             *  this 自锁自解 当前这个类 T 不是访问者。
+             *  this  当前这个类 T 不是访问者。
              * */
             count--;
             System.out.println(Thread.currentThread().getName() + "count" + count);

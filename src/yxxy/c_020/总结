@@ -1,0 +1,13 @@
+ReentrantLock
+    这个类是Lock接口的实现类，可以实现 synchronized 的功能。 两者性能相等。
+    区别在于， synchronized 是自动释放锁 ReentrantLock 需要手动释放锁，所以又称为手工锁
+    方法：
+        tryLock  尝试锁定。 不管锁不锁都会执行。 返回值是boolean类型 可以根据返回值判断是否上锁
+        该方法还可以指定时间。
+
+        lockInterruptibly  搭配 interrupt 可以从外部打断线程的等待
+        如果 使用 lock()方法加锁，则将会一直等待无法打断
+
+        ReentrantLock lock = new ReentrantLock(true) 公平锁。 默认为false
+        通过构造方法指定为true，会优先把锁赋予等待时间最长的线程
+

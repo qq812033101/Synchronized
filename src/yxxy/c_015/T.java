@@ -1,17 +1,26 @@
-package yxxy.c_013;
+package yxxy.c_015;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class T {
-    volatile int count = 0;
 
     /**
-     * volatile 并不能保证多个线程共同修改running变量是所带的不一致问题，
-     * 也就是说 volatile 不能替代 synchronized
+     * 解决同样的问题的更高效的方法，使用 AtomXXX类
+     * AtomXXX类本身方法都是原子性的，但不能保证多个方法的连续调用是原子性
      */
-    void m() {
-        for (int i = 0; i < 10000; i++) count++;
+
+    AtomicInteger count = new AtomicInteger(0);
+
+    /*synchronized*/ void m() {
+        for (int i = 0; i < 10000; i++) {
+            /*if(count.get()<1000){
+
+            }
+            */
+            count.incrementAndGet();
+        }
     }
 
     @SuppressWarnings("Duplicates")

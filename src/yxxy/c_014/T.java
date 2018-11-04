@@ -1,16 +1,15 @@
-package yxxy.c_013;
+package yxxy.c_014;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class T {
-    volatile int count = 0;
+    /*volatile*/ int count = 0;
 
     /**
-     * volatile 并不能保证多个线程共同修改running变量是所带的不一致问题，
-     * 也就是说 volatile 不能替代 synchronized
+     * 对比013 使用 synchronized 解决问题
      */
-    void m() {
+   synchronized void m() {
         for (int i = 0; i < 10000; i++) count++;
     }
 
