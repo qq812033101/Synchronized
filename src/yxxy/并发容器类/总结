@@ -1,0 +1,29 @@
+1 对于 map/set的选择使用
+不加锁则使用以下
+hashmap
+treemap
+linkedhashmap
+
+需要加锁可以使用
+
+并发不高的情况下可以使用
+Collections.sychronizedXXX
+hashtable
+
+CopyOnWriteArrayList
+写少 读多请用这个
+
+高并发下
+ConcurrentHashMap
+高并发还需要排序的
+ConcurrentSkipListMap
+
+Queue
+    ConcurrentLinkedQueue //内部加锁
+
+    BlockingQueue //阻塞队列
+        LinkedBlockingQueue 无界队列
+        ArrayBlockingQueue  有界队列
+        DelayQueue 执行定时任务
+        TransferQueue
+        SynchronousQueue
