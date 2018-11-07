@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 public class ArrayBlockingQueueTest {
     //有界队列 能装的元素个数是固定的
     static ArrayBlockingQueue<String> srs = new ArrayBlockingQueue<>(10);
+    static ArrayBlockingQueue<String> srss = new ArrayBlockingQueue<String>(10);
     static Random r = new Random();
 
     public static void main(String[] args) throws InterruptedException {

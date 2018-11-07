@@ -1,29 +1,79 @@
-1 对于 map/set的选择使用
+ReentrantLock
+    这个类是Lock接口的实现类，可以实现 synchronized 的功能。 两者性能相等。
+    区别在于， synchronized 是自动释放锁 ReentrantLock 需要手动释放锁，所以又称为手工锁
+    方法：
+        tryLock  尝试锁定。 不管锁不锁都会执行。 返回值是boolean类型 可以根据返回值判断是否上锁
+        该方法还可以指定时间。
+
+        lockInterruptibly  搭配 interrupt 可以从外部打断线程的等待
+        如果 使用 lock()方法加锁，则将会一直等待无法打断
+
+        ReentrantLock lock = new ReentrantLock(true) 公平锁。 默认为false
+        通过构造方法指定为true，会优先把锁赋予等待时间最长的线程
+
+
+
+对于 map/set的选择使用
 不加锁则使用以下
 hashmap
-treemap
+treemap //非并发自带排序
 linkedhashmap
 
-需要加锁可以使用
-
 并发不高的情况下可以使用
-Collections.sychronizedXXX
-hashtable
-
-CopyOnWriteArrayList
-写少 读多请用这个
+Collections.sychronizedXXX //例如：普通无锁list 传入  Collections.synchronizedList(strs) 中 返回的就是 一个加了锁的list
+hashtable //早期有锁map 直接锁定整个容器
 
 高并发下
 ConcurrentHashMap
+相比 hashtable  ConcurrentHashMap 对于锁控制的更加细致！！！
+往 Hashtable 添加数据的时候，是锁定整个容器
+而 ConcurrentHashMap 则是默认把容器分成16段，每次插入数据只锁定16段中的一段（默认是16段），别的线程进来可以去访问另外一段。
+ConcurrentHashMap 控制的更细，能支持更多的线程同时访问
+
 高并发还需要排序的
-ConcurrentSkipListMap
+ConcurrentSkipListMap //跳表数据结构
 
-Queue
-    ConcurrentLinkedQueue //内部加锁
+写少 读多请用这个
+CopyOnWriteArrayList 写实复制
+写的效率非常低，读的效率非常高
+在往容器添加数据的时候，它会把自己复制一份并把新数据添加进去成为一个新容器，然后引用指向新容器
+优点：从容器往外读数据的时候 可以不用加锁
+适合 少写 多读 的场景
 
-    BlockingQueue //阻塞队列
+Queue 队列容器
+    核心方法：
+        offer() ： 类似add()方法 如果添加的数据超过容器容量限制，add()方法会抛出异常，
+        offer()则不会 该方法返回值是个 boolean 类型 可以用来判断数据是否添加进了容器中
+
+        poll()：从脑袋上拿走一个元素，并删除它。
+        peek(): 从脑袋上拿走一个元素，但不删除
+
+    ConcurrentLinkedQueue
+    是一个基于链接节点的无界线程安全队列，
+    它采用先进先出的规则对节点进行排序，当我们添加一个元素的时候，
+    它会添加到队列的尾部，当我们获取一个元素时，它会返回队列头部的元素。
+    ConcurrentLinkedQueue的size()方法 是要遍历一遍集合的，效率很慢。
+
+
+ BlockingQueue 阻塞式队列
+        阻塞队列特有方法
+        put():put方法在队列满的时候会阻塞直到有队列成员被消费
+        take():take方法在队列空的时候会阻塞，直到有队列成员被放进来。
+
         LinkedBlockingQueue 无界队列
+        由于LinkedBlockingQueue实现是线程安全的，实现了先进先出等特性，是作为生产者消费者的首选，
+        LinkedBlockingQueue 可以指定容量，也可以不指定，不指定的话，默认最大是Integer.MAX_VALUE，其中主要用到put和take方法
+
         ArrayBlockingQueue  有界队列
-        DelayQueue 执行定时任务
+        容器初始化的生活就必须指定容量。
+        满容量下，调用 put()方法会进入等待状态，调用add()方法会直接抛出异常，调用offer()则会无事发生，不会添加也不会报错。
+
+        DelayQueue
+        执行定时任务专用
+        该容器里,每个元素都有一个冻结时间,冻结时间内该元素将不能取出。
+        容器内的泛型必须是实现了 Delayed 接口的类。
+        该容器自带排序,冻结时间越长的排越面前。
+
         TransferQueue
+
         SynchronousQueue

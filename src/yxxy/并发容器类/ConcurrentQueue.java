@@ -8,7 +8,7 @@ public class ConcurrentQueue {
     public static void main(String[] args) {
         Queue<String> strs = new ConcurrentLinkedQueue<>();
         /**
-         * 核心容器 用的最多的
+         *  核心容器 用的最多的
          *  offer() 类似add 但是add的方法下有容量限制，超过容量会抛出异常
          *  offer()则不会 返回值是个 boolean 类型
          */

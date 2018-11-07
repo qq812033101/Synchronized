@@ -17,7 +17,7 @@ public class SynchronusQueue {
             }
         }).start();
         strs.put("aaa"); //阻塞 等待消费者消费
-        //strs.add("aaa");
+        //strs.add("aaa"); //会抛出异常
         System.out.println(strs.size());
     }
 }

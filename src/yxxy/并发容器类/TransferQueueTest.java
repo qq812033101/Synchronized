@@ -5,7 +5,6 @@ import java.util.concurrent.LinkedTransferQueue;
 public class TransferQueueTest {
     public static void main(String[] args) throws InterruptedException {
         //跟普通的queue是一样，但提供了一个特殊的方法 transfer
-        //
         LinkedTransferQueue<String> strs = new LinkedTransferQueue<>();
         new Thread(() -> {
             try {
