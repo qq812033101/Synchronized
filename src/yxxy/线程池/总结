@@ -1,0 +1,61 @@
+Executor 用来执行任务的 任务执行器
+ExecutorService  后台服务，用来运行传递进来的任务
+该接口除了 executor()方法外，还一个 submit()方法，该方法是重载方法
+ @Override
+    public <T> Future<T> submit(Callable<T> task) {
+        return null;
+    }
+
+    @Override
+    public <T> Future<T> submit(Runnable task, T result) {
+        return null;
+    }
+
+    @Override
+    public Future<?> submit(Runnable task) {
+        return null;
+    }
+ 除了可以传 Runnable 外还可以传 Callable
+
+Callable 跟 Runnable 类似。
+区别在于各自的方法。 Callable 中的 call 方法自带返回值，并允许抛异常。
+两者使用场景：
+    1 当线程调用完任务之后，需要一个返回值，则使用call
+    2 需要抛异常的情况下 使用call
+
+Executors 工具类
+该类服务于 跟 Executor 相关的类 里面自定义了一些工厂方法,工具方法。
+
+Future  未来任务 拿到未来的返回值
+    submit()其中一个重载方法的返回值
+    未来的某一个时间点上，任务执行完了会返回一个结果。
+
+ThreadPool 固定个数的线程池
+    线程池就是一堆线程，然后装在某个容器中等待运行。
+    好处：线程执行完之后不会销毁，而是回到池中，当有任务需要线程的时候可以去池中拿就可以,节省系统资源
+    池中维护着2个队列，一个执行队列，一个结束队列。
+    任务执行完后，线程会进入等待状态，当一定时间没被调用，则会被销毁
+
+CachedPool
+    缓存线程池 弹性线程.
+    初始时，一个线程都没有。来一个任务起一个线程，最大现场数取决于缓存的大小。
+    当一个线程执行结束后,会进入一个空闲等待状态,不会立即销毁，当有新的任务进来时，依旧可以调用改线程去执行
+    线程的默认空闲时间只有60秒，过了便会销毁。 可以自定义空闲时间
+
+SingleThreadPool
+    见名知意，就一个线程
+    用处：当有多个任务需要顺序执行的时候使用
+
+ScheduledPool
+    定时器线程池,里面的线程依旧可以复用
+
+WorkStealingPool 主动找活干~  窃取线程池
+    该池中的线程都是精灵线程！！！
+    主动线程池  线程数根据cup的核心数来决定
+    池中的每一个线程都维护者各自的一个任务空间，当某一个线程任务空间里的任务都执行完了,那么该线程会主动的去别的线程的任务空间中拿取任务执行。
+    底层采用的是ForkJoinPool
+
+ForkJoinPool 并行线程池
+    难的一批
+    ForkJoinPool  把一个任务进行无限的拆分并执行,执行完毕后在把最终结果进行合并
+    可以用来进行大规模的计算场景
